@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Product.Core.Entities;
 using Product.Core.Interface;
@@ -11,10 +12,12 @@ namespace Product.API.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly IUnitOfWork _uow;
+        private readonly IMapper _mapper;
 
-        public CategoryController(IUnitOfWork Uow)
+        public CategoryController(IUnitOfWork Uow, IMapper mapper)
         {
             _uow = Uow;
+            _mapper = mapper;
         }
 
 
@@ -24,7 +27,15 @@ namespace Product.API.Controllers
             var all_category = await _uow.CateogryRepository.GetAllAsync();
             if(all_category != null)
             {
-                return Ok(all_category);
+
+                //var res = all_category.Select(x => new CategoryDto
+                //{
+                //    Id = x.Id,
+                //    Name = x.Name,
+                //    Description = x.Description,
+                //});
+                var res =  _mapper.Map<IReadOnlyList<Category>,IReadOnlyList<ListCategoryDto>>(all_category); 
+                return Ok(res);
             }
             return BadRequest("Not Found");
         }
@@ -33,11 +44,11 @@ namespace Product.API.Controllers
         public async Task<ActionResult> Get(int id)
         {
             var category = await _uow.CateogryRepository.GetAsync(id);
-            if(category != null)
+            if(category == null)
             {
-                return Ok(category);
+                return BadRequest($"Not found this id = [{id}]");
             }
-            return BadRequest($"Not found this id = [{id}]");
+            return Ok(_mapper.Map<Category, ListCategoryDto>(category));
         }
 
 
@@ -48,13 +59,14 @@ namespace Product.API.Controllers
             {
                 if(ModelState.IsValid)
                 {
-                    var new_category = new Category
-                    {
-                        Name = categoryDto.Name,
-                        Description = categoryDto.Description,
-                    };
-                    await _uow.CateogryRepository.AddAsync(new_category);
-                    return Ok(new_category);
+                    var res = _mapper.Map<Category>(categoryDto);
+                    //var new_category = new Category
+                    //{
+                    //    Name = categoryDto.Name,
+                    //    Description = categoryDto.Description,
+                    //};
+                    await _uow.CateogryRepository.AddAsync(res);
+                    return Ok(res);
                 }
                 return BadRequest();
             }
@@ -77,8 +89,9 @@ namespace Product.API.Controllers
                     var exiting_cateogry = await _uow.CateogryRepository.GetAsync(id);
                     if(exiting_cateogry != null)
                     {
-                        exiting_cateogry.Name = categoryDto.Name;
-                        exiting_cateogry.Description = categoryDto.Description;
+                        _mapper.Map(categoryDto, exiting_cateogry);
+                        //exiting_cateogry.Name = categoryDto.Name;
+                        //exiting_cateogry.Description = categoryDto.Description;
                     }
                     await _uow.CateogryRepository.UpdateAsync(id, exiting_cateogry);
                     return Ok(exiting_cateogry);

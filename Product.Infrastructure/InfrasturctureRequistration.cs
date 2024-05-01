@@ -20,6 +20,8 @@ namespace Product.Infrastructure
             services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
             //services.AddScoped<IcateogryRepository, CategoryRepository>();
             //services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(configure.GetConnectionString("DefaulConnect"));
