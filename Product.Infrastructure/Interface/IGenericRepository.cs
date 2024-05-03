@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Product.Core.Interface
+namespace Product.Infrastructure.Interface
 {
     public interface IGenericRepository<T> where T : BasicEntity<int>
     {
@@ -28,8 +28,5 @@ namespace Product.Core.Interface
         Task UpdateAsync(int id, T entity);
 
         Task DeleteAsync(int id);
-
-
-        Task<int> CountAsync();
     }
 }

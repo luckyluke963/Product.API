@@ -1,6 +1,8 @@
-﻿using AutoMapper;
+﻿
+
+using AutoMapper;
+using Product.Core.Dto;
 using Product.Core.Entities;
-using Product.Infrastructure.Data;
 
 namespace Product.API.Models
 {

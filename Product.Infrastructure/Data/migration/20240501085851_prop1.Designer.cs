@@ -2,17 +2,20 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Product.Infrastructure.Data;
 
 #nullable disable
 
-namespace Product.Infrastructure.Data.migrationnone
+namespace Product.Infrastructure.Data.migration
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240501085851_prop1")]
+    partial class prop1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,8 +89,7 @@ namespace Product.Infrastructure.Data.migrationnone
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("ProductPicture")
-                        .IsRequired()
+                    b.Property<string>("productPicture")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -104,7 +106,7 @@ namespace Product.Infrastructure.Data.migrationnone
                             Description = "Description 1",
                             Name = "Product 1",
                             Price = 100m,
-                            ProductPicture = "http"
+                            productPicture = "http"
                         },
                         new
                         {
@@ -113,7 +115,7 @@ namespace Product.Infrastructure.Data.migrationnone
                             Description = "Description 2",
                             Name = "Product 2",
                             Price = 200m,
-                            ProductPicture = "http"
+                            productPicture = "http"
                         },
                         new
                         {
@@ -122,7 +124,7 @@ namespace Product.Infrastructure.Data.migrationnone
                             Description = "Description 3",
                             Name = "Product 3",
                             Price = 300m,
-                            ProductPicture = "http"
+                            productPicture = "http"
                         });
                 });
 
