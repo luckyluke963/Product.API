@@ -11,5 +11,7 @@ namespace Product.Core.Interface
         public IcateogryRepository CateogryRepository { get; }
 
         public IProductRepository ProductRepository { get; }
+
+        public IBasketRepository BasketRepository { get; }
     }
 }
